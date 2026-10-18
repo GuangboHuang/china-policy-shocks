@@ -48,8 +48,8 @@ COLUMN_ALIASES: Dict[str, List[str]] = {
     "identification_risk": ["识别风险类型", "识别风险", "identification_risk", "Identification Risk"],
     "data_source": ["数据源", "可用数据源", "data_source", "Data Source"],
     "rating": ["推荐等级", "rating", "Rating"],
-    "official_source": ["官方来源 URL", "官方来源", "official_source", "Official Source"],
-    "notes": ["备注", "notes", "Notes"],
+    "official_source": ["官方来源URL", "官方来源 URL", "官方来源", "official_source", "Official Source"],
+    "notes": ["备注/下一步核验", "备注", "notes", "Notes"],
 }
 
 
@@ -105,14 +105,9 @@ def read_policy_excel(path: Path) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"找不到 Excel 文件：{path}")
 
-    xls = pd.ExcelFile(path)
-
-    if PREFERRED_SHEET in xls.sheet_names:
-        sheet_name = PREFERRED_SHEET
-    else:
-        sheet_name = xls.sheet_names[0]
-
-    return pd.read_excel(path, sheet_name=sheet_name)
+    with pd.ExcelFile(path) as xls:
+        sheet_name = PREFERRED_SHEET if PREFERRED_SHEET in xls.sheet_names else xls.sheet_names[0]
+        return pd.read_excel(xls, sheet_name=sheet_name)
 
 
 def clean_columns(df: pd.DataFrame) -> pd.DataFrame:

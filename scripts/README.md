@@ -1,8 +1,5 @@
-# scripts
+# 数据维护
 
-当前版本暂不放置自动化脚本。后续可补充：
+以 `data/policy_shock_library_v0_1.xlsx` 为维护源。官方链接需核实网页内容及适用范围，并同步更新 `data/official_source_audit.csv`；多个链接以英文分号分隔。
 
-- 官方政策链接核验脚本；
-- CSV 字段检查脚本；
-- Quarto 表格生成脚本；
-- 政策卡片模板生成脚本。
+运行 `python scripts/build_appendix.py` 生成CSV及附录，再运行 `python scripts/check_data.py` 执行离线一致性检查。来源范围与待补证据见 `data/SOURCE_AUDIT.md`。GitHub Actions在push和PR时执行同样检查。
